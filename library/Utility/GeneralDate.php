@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：GeneralDate.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:18:43
-*   Description：
-================================================================*/
+
 namespace Utility;
 class GeneralDate
 {
@@ -161,7 +156,7 @@ class GeneralDate
 	/**
 	 * 获取当前日期的天数
 	 * 
-	 * @param string $display 显示类型，默认为0，显示两位的日期
+	 * @param mixed $display 显示类型，默认为0，显示两位的日期
 	 * @return string 
 	 */
 	public function getDay($display = self::FILL) {
@@ -178,7 +173,7 @@ class GeneralDate
 	/**
 	 * 获取当前日期的星期
 	 * 
-	 * @param string $display 显示类型，默认为0，返回数字表示的星期中的第几天
+	 * @param mixed $display 显示类型，默认为0，返回数字表示的星期中的第几天
 	 * @return string
 	 */
 	public function getWeek($display = self::FILL) {
@@ -193,7 +188,7 @@ class GeneralDate
 	/**
 	 * 获取当前日期的12小时制时间
 	 * 
-	 * @param string $display 显示类型，默认为0，显示两位的小时
+	 * @param mixed $display 显示类型，默认为0，显示两位的小时
 	 * @return string
 	 */
 	public function get12Hours($display = self::FILL) {
@@ -201,7 +196,6 @@ class GeneralDate
 			return date('h', $this->time);
 		} elseif (self::DIGIT == $display) {
 			return date('g', $this->time);
-			;
 		}
 		return date('h', $this->time);
 	}
@@ -209,7 +203,7 @@ class GeneralDate
 	/**
 	 * 获取当前日期的24小时制时间
 	 * 
-	 * @param string $display 显示类型，默认为0，显示两位的小时
+	 * @param mixed $display 显示类型，默认为0，显示两位的小时
 	 * @return string
 	 */
 	public function get24Hours($display = self::FILL) {
@@ -217,7 +211,6 @@ class GeneralDate
 			return date('H', $this->time);
 		} elseif (self::DIGIT == $display) {
 			return date('G', $this->time);
-			;
 		}
 		return date('H', $this->time);
 	}

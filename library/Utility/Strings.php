@@ -1,10 +1,5 @@
 <?php
-/*================================================================
- *   File Name：Strings.php
- *   Author：carlziess, lizhenglin@g7.com.cn
- *   Create Date：2016-02-20 22:32:24
- *   Description：
- ================================================================*/
+
 namespace Utility;
 class Strings
 {
@@ -267,8 +262,13 @@ class Strings
     }
 
     /**
-     * 小写(utf-8)
-     * @param string $str
+     **********************toLower*******************
+     * description 小写(utf-8)
+     * 2019/3/133:59 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $str
+     * @return string
      */
     static public function toLower($str)
     {
@@ -276,9 +276,15 @@ class Strings
     }
 
     /**
-     * 生成随机串
-     * @param int $length
+     **********************random*******************
+     * description 生成随机串
+     * 2019/3/133:59 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $length
      * @param string $type
+     * @return bool|string
+     * @throws \Exception
      */
     static public function random($length, $type = 'alnum')	
     {
@@ -306,8 +312,18 @@ class Strings
         }                                                                                                                
         $uuid = str_replace(array('-', '{', '}'), '', $uuid);                    
         return $uuid;                                                                                                    
-    } 
+    }
 
+    /**
+     **********************pool*******************
+     * description
+     * 2019/3/133:59 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $type
+     * @return string
+     * @throws \Exception
+     */
     static protected function pool($type)
     {
         switch ($type){

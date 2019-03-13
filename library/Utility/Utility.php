@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Utility.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-15 10:26:28
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Utility
 {
@@ -94,7 +89,7 @@ class Utility
 	 *          <pre>
 	 * @see WindLangResource::getMessage()
 	 * @param string $str        	
-	 * @param string $from        	
+	 * @param mixed $from
 	 * @param string $to
 	 *        	可选参数,默认值为''
 	 * @return string
@@ -138,7 +133,7 @@ class Utility
 	 * @param string $data
 	 * @param string $msg
 	 */
-	static public function ajax($code=0,$data=null,$msg=null)
+	static public function ajax($code=0, $data=null, $msg=null)
 	{
 		header('Content-Type:application/json;charset=UTF-8');
 		$arr['code'] = $code;
@@ -163,7 +158,7 @@ class Utility
 	/**
 	 * 
 	 * @param string $err
-	 * @param unknown $msg
+	 * @param array $msg
 	 */
 	static public function xheditor($err,$msg=[])
 	{
@@ -195,8 +190,8 @@ class Utility
 	
 	/**
 	 * 
-	 * @param unknown $value
-	 * @return unknown|mixed
+	 * @param mixed $value
+	 * @return mixed
 	 */
 	static public function value($value)
 	{

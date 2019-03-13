@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Pack.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:15:14
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Pack
 {
@@ -38,7 +33,7 @@ class Pack
 	 * 
 	 * @param mixed $fileList 文件列表
 	 * @param string $dst  打包文件的存放位置
-	 * @param method $packMethod 打包的方式，默认为stripWhiteSpaceByPhp
+	 * @param mixed $packMethod 打包的方式，默认为stripWhiteSpaceByPhp
 	 * @param boolean $compress 打包是否采用压缩的方式，默认为true
 	 * @return boolean
 	 */
@@ -105,7 +100,7 @@ class Pack
 	 * 从文件列表中取得对应的每个文件的内容 
 	 * 
 	 * @param mixed $fileList 文件列表
-	 * @param method $packMethod  打包方式，默认为stripWhiteSpaceByPhp
+	 * @param mixed $packMethod  打包方式，默认为stripWhiteSpaceByPhp
 	 * @param array $content 保存文件内容，默认为空数组
 	 * @return array:
 	 */

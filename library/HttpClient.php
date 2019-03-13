@@ -1,11 +1,8 @@
 <?php
-/*================================================================
-*  File Name：HttpClient.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-08-07 01:02:27
-*  Description：
-===============================================================*/
+
+
 use \Utility\Date;
+
 class HttpClient
 {
     static protected $sidecarHost = 'http://localhost';
@@ -14,6 +11,19 @@ class HttpClient
     static protected $zullPort = '80';
     static protected $header = false;
 
+    /**
+     **********************zull*******************
+     * description
+     * 2019/3/133:26 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $api
+     * @param array $args
+     * @param string $method
+     * @param array $timer
+     * @return array
+     * @throws Exception
+     */
     static public function zull($api = '', $args = [], $method = 'POST', $timer = [])
     {
         if('' == $api || false == strpos($api,'-') || false == strpos($api,'.'))
@@ -27,7 +37,7 @@ class HttpClient
             empty($config['zullAccessId'])
         ) throw new \Exception('Zull配置无效!',403);
         $zullHost = !empty($config) && isset($config['zullHost']) ? $config['zullHost'] : static::$zullHost;
-        $zullPort = !empty($config) && isset($config['zullPort']) ? $config['zullPort'] : static::$zullPort;
+        //$zullPort = !empty($config) && isset($config['zullPort']) ? $config['zullPort'] : static::$zullPort;
         $path = strtr($api, '.', '/');        
         $uri = $zullHost.$path;
         $args['accessid'] = $config['zullAccessId'];
@@ -35,6 +45,19 @@ class HttpClient
         return static::send($timer, $uri, $args, $method);
     }
 
+    /**
+     **********************sidecar*******************
+     * description
+     * 2019/3/133:26 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $api
+     * @param array $args
+     * @param string $method
+     * @param array $timer
+     * @return array
+     * @throws Exception
+     */
     static public function sidecar($api = '', $args = [], $method = 'POST', $timer = [])
     {
         if('' == $api || false == strpos($api,'-') || false == strpos($api,'.'))
@@ -46,6 +69,19 @@ class HttpClient
         return static::send($uri, $args, $method, $timer); 
     }
 
+    /**
+     **********************send*******************
+     * description
+     * 2019/3/133:26 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $uri
+     * @param array $args
+     * @param string $method
+     * @param array $timer
+     * @return array
+     * @throws Exception
+     */
     static protected function send($uri, $args = [], $method = 'POST', $timer = [])
     {                                                                                                                    
         if('' == $uri) 
@@ -110,4 +146,3 @@ class HttpClient
 
 }
 
-?>

@@ -1,11 +1,8 @@
 <?php
-/*================================================================
-*   File Name：RedisConnection.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-15 18:04:13
-*   Description：
-================================================================*/
+
 namespace Cache\Connector;
+
+
 class RedisConnection 
 {
 	protected $conf;
@@ -20,6 +17,16 @@ class RedisConnection
 		}
 	}
 
+    /**
+     **********************getInstance*******************
+     * description
+     * 2019/3/133:02 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $instance
+     * @return mixed
+     * @throws \Exception
+     */
     static public function getInstance($instance = 'master')
     {
         if(!isset(static::$databases[$instance]))
@@ -36,7 +43,16 @@ class RedisConnection
         }
         return static::$databases[$instance];
     }
-	
+
+    /**
+     **********************connect*******************
+     * description
+     * 2019/3/133:02 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @return \Redis
+     * @throws \Exception
+     */
 	protected function connect()
     {
 		if(!is_null($this->connection)) return $this->connection;
@@ -48,8 +64,8 @@ class RedisConnection
             try
             {
 			    $this->connection->$func($this->conf['host'], $this->conf['port'], $this->conf['timeout']);
-            }catch(Exception $e){
-                throw new Exception($e->getMessage(),$e->getCode());
+            }catch(\Exception $e){
+                throw new \Exception($e->getMessage(),$e->getCode());
             }
 		}
 		if(isset($this->conf['password'])) {
@@ -62,15 +78,43 @@ class RedisConnection
 		return $this->connection;
 	}
 
+    /**
+     **********************getConnection*******************
+     * description
+     * 2019/3/133:02 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @return \Redis
+     * @throws \Exception
+     */
 	public function getConnection()
 	{
-		return $this->connect();
-	}
-	
+        try {
+            return $this->connect();
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
+
+    /**
+     **********************__call*******************
+     * description
+     * 2019/3/133:02 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws \Exception
+     */
 	public function __call($method, $parameters)
 	{
-		return call_user_func_array([$this->connect(),$method], $parameters);
-	}
+        try {
+            return call_user_func_array([$this->connect(), $method], $parameters);
+        } catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
+    }
 	
 	static public function __callStatic($method, $parameters)
 	{

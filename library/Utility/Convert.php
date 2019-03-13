@@ -1,21 +1,17 @@
 <?php
-/*================================================================
-*   File Name：Convert.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:17:41
-*   Description：
-================================================================*/
+
 namespace Utility;
+
 class Convert
 {
 
 	/**
 	 * 编码转换
-	 * @param string $str 内容字符串
+	 * @param mixed $str 内容字符串
 	 * @param string $toEncoding 转为新编码
 	 * @param string $fromEncoding 原编码
 	 * @param bool $ifMb 是否使用mb函数
-	 * @return string
+	 * @return mixed
 	 */
 	static public function convert($str, $toEncoding, $fromEncoding, $ifMb = true) {
 		if (!strcasecmp($toEncoding, $fromEncoding)) return $str;
@@ -45,27 +41,27 @@ class Convert
 	 * gbk转为utf8编码
 	 * @param mixed $srcText        
 	 */
-	static public function gbkToUtf8($srcText) {
-		return iconv('GBK', 'UTF-8', $srcText);
-		$this->getTableIndex();
-		$tarText = '';
-		for ($i = 0; $i < strlen($srcText); $i += 2) {
-			$h = ord($srcText[$i]);
-			if ($h > 127 && isset($this->TableIndex[$this->EncodeLang][$h])) {
-				$l = ord($srcText[$i + 1]);
-				if (!isset($this->TableEncode[$this->EncodeLang][$h][$l])) {
-					fseek($this->TableHandle, $l * 2 + $this->TableIndex[$this->EncodeLang][$h]);
-					$this->TableEncode[$this->EncodeLang][$h][$l] = $this->UNICODEtoUTF8(
-						hexdec(bin2hex(fread($this->TableHandle, 2))));
-				}
-				$tarText .= $this->TableEncode[$this->EncodeLang][$h][$l];
-			} elseif ($h < 128) {
-				$tarText .= $srcText[$i];
-				$i--;
-			}
-		}
-		return $tarText;
-	}
+//	static public function gbkToUtf8($srcText = '') {
+//		return iconv('GBK', 'UTF-8', $srcText);
+//		$this->getTableIndex();
+//		$tarText = '';
+//		for ($i = 0; $i < strlen($srcText); $i += 2) {
+//			$h = ord($srcText[$i]);
+//			if ($h > 127 && isset($this->TableIndex[$this->EncodeLang][$h])) {
+//				$l = ord($srcText[$i + 1]);
+//				if (!isset($this->TableEncode[$this->EncodeLang][$h][$l])) {
+//					fseek($this->TableHandle, $l * 2 + $this->TableIndex[$this->EncodeLang][$h]);
+//					$this->TableEncode[$this->EncodeLang][$h][$l] = $this->UNICODEtoUTF8(
+//						hexdec(bin2hex(fread($this->TableHandle, 2))));
+//				}
+//				$tarText .= $this->TableEncode[$this->EncodeLang][$h][$l];
+//			} elseif ($h < 128) {
+//				$tarText .= $srcText[$i];
+//				$i--;
+//			}
+//		}
+//		return $tarText;
+//	}
 
 	/**
 	 * utf16be编码转化为utf8编码
@@ -77,13 +73,16 @@ class Convert
 		return self::unicodeToUTF8(unpack('n*', $str));
 	}
 
-	/**
-	 * utf8编码转为utf16BE
-	 * 
-	 * @param string $string        
-	 * @param boolean $bom
-	 *        是否Big-Endian
-	 */
+    /**
+     **********************utf8ToUTF16BE*******************
+     * description utf8编码转为utf16BE
+     * 2019/3/133:49 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $string
+     * @param bool $bom
+     * @return string
+     */
 	static public function utf8ToUTF16BE($string, $bom = false) {
 		$out = $bom ? "\xFE\xFF" : '';
 		if (function_exists('mb_convert_encoding')) {
@@ -99,7 +98,7 @@ class Convert
 	/**
 	 * unicode编码转化为utf8编码
 	 * 
-	 * @param string $str        
+	 * @param array $str
 	 * @return string
 	 */
 	static public function unicodeToUTF8($str) {
@@ -123,7 +122,7 @@ class Convert
 	 * utf8编码转化为unicode
 	 * 
 	 * @param string $string        
-	 * @return Ambigous <multitype:, number>
+	 * @return mixed
 	 */
 	static public function utf8ToUnicode($string) {
 		$unicode = $values = array();
@@ -176,7 +175,7 @@ class Convert
 	/**
 	 * iconv 是否开启
 	 * 
-	 * @param 目标编码 $targeLang        
+	 * @param $targeLang
 	 * @return boolean
 	 */
 	private static function _isIconv($targeLang) {

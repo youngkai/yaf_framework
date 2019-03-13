@@ -1,16 +1,25 @@
 <?php
-/*================================================================
- *  File Name：OpenSSL.php
- *  Author：carlziess, chengmo9292@126.com
- *  Create Date：2016-09-21 09:50:32
- *  Description：
- ===============================================================*/
+
 namespace Encryptions;
+
 class OpenSSL
 {
     
     static protected $cipher = 'AES-256-CBC';
 
+    /**
+     **********************encrypt*******************
+     * description
+     * 2019/3/133:15 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $plainText
+     * @param string $cipher
+     * @param string $key
+     * @param int $options
+     * @return string
+     * @throws \Exception
+     */
     static public function encrypt($plainText = '', $cipher = '', $key = '',$options = OPENSSL_RAW_DATA)
     {
         if ('' === $plainText) throw new \Exception('The plain text and key can not be null', 500); 
@@ -24,6 +33,19 @@ class OpenSSL
         return base64_encode($iv.$hmac.$cipherTextRaw);
     }
 
+    /**
+     **********************decrypt*******************
+     * description
+     * 2019/3/133:15 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $cipherText
+     * @param string $cipher
+     * @param string $key
+     * @param int $options
+     * @return string
+     * @throws \Exception
+     */
     static public function decrypt($cipherText = '', $cipher = '', $key = '', $options= OPENSSL_RAW_DATA)
     {
         if ('' === $cipherText) throw new \Exception('The cipher text and key can not be null',500); 
@@ -58,7 +80,19 @@ class OpenSSL
 		openssl_free_key(openssl_pkey_get_private($privateKey));
 		return static::strToHex(base64_encode($crypted));
 	}
-	
+
+    /**
+     **********************privateKeyDecrypt*******************
+     * description
+     * 2019/3/133:15 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $cipherHexText
+     * @param string $privateKey
+     * @param bool $ajax
+     * @return mixed
+     * @throws \Exception
+     */
 	static public function privateKeyDecrypt($cipherHexText = '', $privateKey = '', $ajax = false)
     {
         if ('' === $cipherHexText || '' === $privateKey)  

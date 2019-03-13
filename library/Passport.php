@@ -1,11 +1,5 @@
 <?php
 
-/*================================================================
-*   File Name：Passport.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-19 15:55:43
-*   Description：
-================================================================*/
 
 class Passport
 {

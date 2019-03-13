@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Arrays.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:16:32
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Arrays
 {
@@ -55,12 +50,16 @@ class Arrays
 		return $tmp;
 	}
 
-	/**
-	 * 按指定KEY重新生成数组
-	 * @param string key 	重新生成数组的参照值
-	 * @param array  $array 要重新生成的数组
-	 * @return array 返回重新生成后的数组
-	 */
+    /**
+     **********************rebuildArrayWithKey*******************
+     * description
+     * 2019/3/133:42 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $key
+     * @param array $array
+     * @return array
+     */
 	static public function rebuildArrayWithKey($key, array $array) {
 		if (!$key || !$array) {
 			return array();
@@ -73,13 +72,18 @@ class Arrays
 		}
 		return $tmp;
 	}
-	
-	/**
-	 * 获取指定key的value
-	 * @param array $array
-	 * @param string $key
-	 * @param string $default
-	 */
+
+    /**
+     **********************array_get*******************
+     * description 获取指定key的value
+     * 2019/3/133:43 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $array
+     * @param $key
+     * @param null $default
+     * @return mixed|string
+     */
 	static public function array_get($array, $key, $default = null) {
 		if (is_null($key)) return $array;
 		foreach (explode('.', $key) as $segment) {
@@ -90,13 +94,18 @@ class Arrays
 		}
 		return $array;
 	}
-	
-	/**
-	 * 向数组插入指定的key/value
-	 * @param array $array
-	 * @param string $key
-	 * @param array $value
-	 */
+
+    /**
+     **********************array_set*******************
+     * description 向数组插入指定的key/value
+     * 2019/3/133:43 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $array
+     * @param $key
+     * @param $value
+     * @return mixed
+     */
 	static public function array_set(&$array, $key, $value) {
 		if (is_null($key)) return $array = $value;
 		$keys = explode('.', $key);
@@ -138,7 +147,7 @@ class Arrays
 	
 			if (is_array($value))
 			{
-				$result[$key] = array_strip_slashes($value);
+				$result[$key] = self::array_strip_slashes($value);
 			}
 			else
 			{

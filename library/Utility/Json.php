@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Json.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:19:22
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Json
 {
@@ -14,13 +9,16 @@ class Json
 	const JSON_IN_OBJ = 8;
 	const JSON_IN_CMT = 16;
 
-	/**
-	 * 将数据用json加密
-	 *
-	 * @param mixed $value 要加密的值
-	 * @param string $charset
-	 * @return string
-	 */
+    /**
+     **********************encode*******************
+     * description 将数据用json加密
+     * 2019/3/133:56 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $source
+     * @param string $charset
+     * @return float|int|string
+     */
 	static public function encode($source, $charset = 'utf-8') {
 		switch (gettype($source)) {
 			case 'boolean':
@@ -82,7 +80,7 @@ class Json
 	 * 将json格式转成php string类型
 	 *
 	 * @param string $string json字符串
-	 * @return Ambigous <string, unknown>
+	 * @return mixed
 	 */
 	static protected function jsonToString($string) {
 		$delim = substr($string, 0, 1);
@@ -141,14 +139,14 @@ class Json
 	 *
 	 * @param string $str
 	 * @param boolean $toArray
-	 * @return Ambigous <multitype:, stdClass>|multitype:|Ambigous <mixed, boolean, NULL, number, multitype:, stdClass, Ambigous, string, unknown>|boolean
+	 * @return mixed
 	 */
 	static protected function complexConvert($str, $toArray = true) {
 		if ('[' == $str{0}) {
 			$stk = array(self::JSON_IN_ARR);
 			$arr = array();
 		} else {
-			$obj = $toArray ? array() : new stdClass();
+			$obj = $toArray ? array() : new \stdClass();
 			$stk = array(self::JSON_IN_OBJ);
 		}
 		array_push($stk, array('what' => self::JSON_SLICE, 'where' => 0, 'delim' => false));
@@ -276,12 +274,12 @@ class Json
 	/**
 	 * 将对象转化成json格式对象
 	 *
-	 * @param string $object
+	 * @param mixed $object
 	 * @param string $charset
 	 * @return string
 	 */
 	static protected function objectToJson($object, $charset = 'utf-8') {
-		if ($object instanceof Traversable) {
+		if ($object instanceof \Traversable) {
 			$vars = array();
 			foreach ($object as $k => $v) {
 				$vars[$k] = $v;

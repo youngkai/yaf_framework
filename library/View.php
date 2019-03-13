@@ -1,10 +1,6 @@
 <?php
-/*================================================================
- *  File Name：View.php
- *  Author：carlziess, chengmo9292@126.com
- *  Create Date：2016-09-03 13:03:01
- *  Description：
- ===============================================================*/
+
+
 define('VIEW_EXT', '.'.\Yaf_Registry::get('config')->get('yaf.view.ext'));
 class View implements \Yaf_View_Interface
 {
@@ -60,6 +56,16 @@ class View implements \Yaf_View_Interface
         $this->tpl_vars[$name] = $value;
     }
 
+    /**
+     **********************setScriptPath*******************
+     * description
+     * 2019/3/133:42 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $path
+     * @return bool
+     * @throws Exception
+     */
     public function setScriptPath($path) 
     {
         if(is_readable($path)) 
@@ -76,4 +82,3 @@ class View implements \Yaf_View_Interface
     }
 }
 
-?>

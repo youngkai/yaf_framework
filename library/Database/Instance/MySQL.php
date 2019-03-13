@@ -1,12 +1,9 @@
 <?php
-/*================================================================
-*   File Name：MySQL.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-01-25 14:35:22
-*   Description：
-================================================================*/
+
 namespace Database\Instance;
-use PDO,PDOStatement,PDOException;
+use PDO,PDOException;
+
+
 class MySQL
 {
 	private $pdo;
@@ -34,7 +31,8 @@ class MySQL
             }  
             if($stmt->execute()){  
                 return $stmt;  
-            }  
+            }
+            return null;
         }catch(PDOException $e){
 			throw new PDOException($e);
 		}
@@ -83,15 +81,20 @@ class MySQL
     public function commit() 
     {  
         return $this->pdo->commit();  
-    }  
-    
+    }
+
     /**
-     * 分页
-     * @param string $countSql
-     * @param string $selectSql
+     **********************page*******************
+     * description
+     * 2019/3/133:10 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $countSql
+     * @param $selectSql
      * @param array $params
-     * @param integer $pageNo
-     * @param integer $pageSize
+     * @param $pageNo
+     * @param $pageSize
+     * @return array
      */
     public function page($countSql, $selectSql, $params = [], &$pageNo, $pageSize) 
     {  

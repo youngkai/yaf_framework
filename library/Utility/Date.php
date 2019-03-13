@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Date.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:18:07
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Date
 {

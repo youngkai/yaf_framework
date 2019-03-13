@@ -1,24 +1,19 @@
 <?php
-/*================================================================
-*  File Name：MySQLi.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-06-19 17:57:22
-*  Description：
-*  About the types and the first you should know
-*  Character Description
-*  i    corresponding variable has type integer
-*  d    corresponding variable has type double
-*  s    corresponding variable has type string
-*  b    corresponding variable is a blob and will be sent in packets
-*  Exception:
-*  code => 1292 : parameters types error 
-===============================================================*/
+
 namespace Database;
 mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+
+
 class MySQLi
 {
     private $connections;
-    private $transaction = [MYSQLI_TRANS_START_READ_ONLY,MYSQLI_TRANS_START_READ_WRITE,MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT];
+    //private $transaction = [MYSQLI_TRANS_START_READ_ONLY,MYSQLI_TRANS_START_READ_WRITE,MYSQLI_TRANS_START_WITH_CONSISTENT_SNAPSHOT];
+
+    /**
+     * MySQLi constructor.
+     * @param $config
+     * @throws \Exception
+     */
     public function __construct($config)
 	{
         $host = isset($config['host']) && !empty($config['host']) ? $config['host'] : '127.0.0.1';
@@ -33,6 +28,20 @@ class MySQLi
         $this->connections->set_charset($charset);
     }
 
+
+    /**
+     **********************getOne*******************
+     * description
+     * 2019/3/133:11 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return array
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function getOne($types = '',$sql = '', array $parameters = [])
     {
         if('' == $sql) 
@@ -57,6 +66,19 @@ class MySQLi
         return $data;
     }
 
+    /**
+     **********************getRow*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return array
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function getRow($types = '',$sql = '', array $parameters = [])
     {
         if('' == $sql) 
@@ -88,7 +110,22 @@ class MySQLi
         $stmt->close();
         return $data;
     }
-    
+
+    /**
+     **********************getList*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param array $sql
+     * @param array $parameters
+     * @param $pageNo
+     * @param $pageSize
+     * @return array
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function getList($types = '', array $sql = [], array $parameters = [], $pageNo, $pageSize) 
     {  
         if(!isset($sql['count']) || empty($sql['count']) || !isset($sql['sql']) || empty($sql['sql'])) 
@@ -131,8 +168,20 @@ class MySQLi
         }
         $stmt->close();
         return $data;
-    }  
+    }
 
+    /**
+     **********************insert*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return array
+     * @throws \Exception
+     */
     public function insert($types = '',$sql = '', array $parameters = [])
     {
         $stmt = $this->bindParams($types,$sql,$parameters);
@@ -149,6 +198,18 @@ class MySQLi
         return $data;
     }
 
+    /**
+     **********************update*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return array
+     * @throws \Exception
+     */
     public function update($types = '',$sql = '', array $parameters = [])
     {
         $stmt = $this->bindParams($types,$sql,$parameters);
@@ -165,6 +226,18 @@ class MySQLi
         return $data;
     }
 
+    /**
+     **********************delete*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return array
+     * @throws \Exception
+     */
     public function delete($types = '',$sql = '', array $parameters = [])
     {
         $stmt = $this->bindParams($types,$sql,$parameters);
@@ -196,6 +269,19 @@ class MySQLi
        return $this->connections->commit();  
     }
 
+    /**
+     **********************bindParams*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return \mysqli_stmt
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     private function bindParams($types = '',$sql = '', $parameters = []) 
     {
         $stmt = $this->connections->prepare($sql);
@@ -209,7 +295,20 @@ class MySQLi
         }
         return $stmt;
     }
-    
+
+    /**
+     **********************getTotal*******************
+     * description
+     * 2019/3/133:12 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $types
+     * @param string $sql
+     * @param array $parameters
+     * @return int
+     * @throws \ReflectionException
+     * @throws \Exception
+     */
     public function getTotal($types = '',$sql = '', array $parameters = [])
     {
         if('' == $sql || false == stripos($sql,'count(*) as total')) return 0; 
@@ -233,7 +332,16 @@ class MySQLi
         return $result['total'] > 0 ? $result['total'] : 0;
     }
 
-    //Warning:Do not fucking use this,if you don't know what you want do.
+    /**
+     **********************query*******************
+     * description
+     * 2019/3/133:13 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $sql
+     * @return array
+     * @throws \Exception
+     */
     public function query($sql = '')
     {
         if('' == $sql) throw new \Exception('Sql statements is not valid!',403);
@@ -254,4 +362,3 @@ class MySQLi
 
 }
 
-?>

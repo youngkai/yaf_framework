@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*  File Name：Security.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2017-02-21 19:32:21
-*  Description：
-===============================================================*/
+
 use Utility\Strings;
 class Security
 {
@@ -22,57 +17,149 @@ class Security
     public $passwordHashStrategy;
     public $passwordHashCost = 13;
 
+    /**
+     **********************encryptByPassword*******************
+     * description
+     * 2019/3/133:33 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $password
+     * @return string
+     * @throws Exception
+     */
     public function encryptByPassword($data, $password)
     {
-        return $this->encrypt($data, true, $password, null);
+        try {
+            return $this->encrypt($data, true, $password, null);
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 
+    /**
+     **********************encryptByKey*******************
+     * description
+     * 2019/3/133:33 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $inputKey
+     * @param null $info
+     * @return string
+     * @throws Exception
+     */
     public function encryptByKey($data, $inputKey, $info = null)
     {
-        return $this->encrypt($data, false, $inputKey, $info);
+        try {
+            return $this->encrypt($data, false, $inputKey, $info);
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 
+    /**
+     **********************decryptByPassword*******************
+     * description
+     * 2019/3/133:34 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $password
+     * @return bool|string
+     * @throws Exception
+     */
     public function decryptByPassword($data, $password)
     {
-        return $this->decrypt($data, true, $password, null);
+        try {
+            return $this->decrypt($data, true, $password, null);
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 
+    /**
+     **********************decryptByKey*******************
+     * description
+     * 2019/3/133:36 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $inputKey
+     * @param null $info
+     * @return bool|string
+     * @throws Exception
+     */
     public function decryptByKey($data, $inputKey, $info = null)
     {
-        return $this->decrypt($data, false, $inputKey, $info);
+        try {
+            return $this->decrypt($data, false, $inputKey, $info);
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }
 
+    /**
+     **********************encrypt*******************
+     * description
+     * 2019/3/133:35 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $passwordBased
+     * @param $secret
+     * @param $info
+     * @return string
+     * @throws Exception
+     */
     protected function encrypt($data, $passwordBased, $secret, $info)
     {
         if (!extension_loaded('openssl')) {
-            throw new Exception('Encryption requires the OpenSSL PHP extension');
+            throw new \Exception('Encryption requires the OpenSSL PHP extension');
         }
         if (!isset($this->allowedCiphers[$this->cipher][0], $this->allowedCiphers[$this->cipher][1])) {
-            throw new Exception($this->cipher . ' is not an allowed cipher');
+            throw new \Exception($this->cipher . ' is not an allowed cipher');
         }
-        list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
-        $keySalt = $this->generateRandomKey($keySize);
-        if ($passwordBased) {
-            $key = $this->pbkdf2($this->kdfHash, $secret, $keySalt, $this->derivationIterations, $keySize);
-        } else {
-            $key = $this->hkdf($this->kdfHash, $secret, $keySalt, $info, $keySize);
+        try {
+            list($blockSize, $keySize) = $this->allowedCiphers[$this->cipher];
+            $keySalt = $this->generateRandomKey($keySize);
+            if ($passwordBased) {
+                $key = $this->pbkdf2($this->kdfHash, $secret, $keySalt, $this->derivationIterations, $keySize);
+            } else {
+                $key = $this->hkdf($this->kdfHash, $secret, $keySalt, $info, $keySize);
+            }
+            $iv = $this->generateRandomKey($blockSize);
+            $encrypted = openssl_encrypt($data, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
+            if ($encrypted === false) {
+                throw new \Exception('OpenSSL failure on encryption: ' . openssl_error_string());
+            }
+            $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
+            $hashed = $this->hashData($iv . $encrypted, $authKey);
+            /*
+             * Output: [keySalt][MAC][IV][ciphertext]
+             * - keySalt is KEY_SIZE bytes long
+             * - MAC: message authentication code, length same as the output of MAC_HASH
+             * - IV: initialization vector, length $blockSize
+             */
+            return $keySalt . $hashed;
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
-        $iv = $this->generateRandomKey($blockSize);
-        $encrypted = openssl_encrypt($data, $this->cipher, $key, OPENSSL_RAW_DATA, $iv);
-        if ($encrypted === false) {
-            throw new \yii\base\Exception('OpenSSL failure on encryption: ' . openssl_error_string());
-        }
-        $authKey = $this->hkdf($this->kdfHash, $key, null, $this->authKeyInfo, $keySize);
-        $hashed = $this->hashData($iv . $encrypted, $authKey);
-        /*
-         * Output: [keySalt][MAC][IV][ciphertext]
-         * - keySalt is KEY_SIZE bytes long
-         * - MAC: message authentication code, length same as the output of MAC_HASH
-         * - IV: initialization vector, length $blockSize
-         */
-        return $keySalt . $hashed;
     }
 
+    /**
+     **********************decrypt*******************
+     * description
+     * 2019/3/133:36 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $passwordBased
+     * @param $secret
+     * @param $info
+     * @return bool|string
+     * @throws Exception
+     */
     protected function decrypt($data, $passwordBased, $secret, $info)
     {
         if (!extension_loaded('openssl')) {
@@ -103,6 +190,20 @@ class Security
         return $decrypted;
     }
 
+    /**
+     **********************hkdf*******************
+     * description
+     * 2019/3/133:36 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $algo
+     * @param $inputKey
+     * @param null $salt
+     * @param null $info
+     * @param int $length
+     * @return string
+     * @throws Exception
+     */
     public function hkdf($algo, $inputKey, $salt = null, $info = null, $length = 0)
     {
         if (function_exists('hash_hkdf')) {
@@ -141,6 +242,20 @@ class Security
         return $outputKey;
     }
 
+    /**
+     **********************pbkdf2*******************
+     * description
+     * 2019/3/133:36 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $algo
+     * @param $password
+     * @param $salt
+     * @param $iterations
+     * @param int $length
+     * @return mixed|string
+     * @throws Exception
+     */
     public function pbkdf2($algo, $password, $salt, $iterations, $length = 0)
     {
         if (function_exists('hash_pbkdf2')) {
@@ -150,7 +265,6 @@ class Security
             }
             return $outputKey;
         }
-        // todo: is there a nice way to reduce the code repetition in hkdf() and pbkdf2()?
         $test = @hash_hmac($algo, '', '', true);
         if (!$test) {
             throw new Exception('Failed to generate HMAC with hash algorithm: ' . $algo);
@@ -185,6 +299,18 @@ class Security
         return $outputKey;
     }
 
+    /**
+     **********************hashData*******************
+     * description
+     * 2019/3/133:36 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $key
+     * @param bool $rawHash
+     * @return string
+     * @throws Exception
+     */
     public function hashData($data, $key, $rawHash = false)
     {
         $hash = hash_hmac($this->macHash, $data, $key, $rawHash);
@@ -194,6 +320,18 @@ class Security
         return $hash . $data;
     }
 
+    /**
+     **********************validateData*******************
+     * description
+     * 2019/3/133:37 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $data
+     * @param $key
+     * @param bool $rawHash
+     * @return bool|string
+     * @throws Exception
+     */
     public function validateData($data, $key, $rawHash = false)
     {
         $test = @hash_hmac($this->macHash, '', '', $rawHash);
@@ -216,6 +354,16 @@ class Security
     private $_useLibreSSL;
     private $_randomFile;
 
+    /**
+     **********************generateRandomKey*******************
+     * description
+     * 2019/3/133:37 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param int $length
+     * @return string
+     * @throws Exception
+     */
     public function generateRandomKey($length = 32)
     {
         if (!is_int($length)) {
@@ -256,8 +404,6 @@ class Security
             }
         }
 
-        // mcrypt_create_iv() does not use libmcrypt. Since PHP 5.3.7 it directly reads
-        // CryptGenRandom on Windows. Elsewhere it directly reads /dev/urandom.
         if (function_exists('mcrypt_create_iv')) {
             $key = mcrypt_create_iv($length, MCRYPT_DEV_URANDOM);
             if (Strings::byteLength($key) === $length) {
@@ -265,26 +411,18 @@ class Security
             }
         }
 
-        // If not on Windows, try to open a random device.
         if ($this->_randomFile === null && DIRECTORY_SEPARATOR === '/') {
-            // urandom is a symlink to random on FreeBSD.
             $device = PHP_OS === 'FreeBSD' ? '/dev/random' : '/dev/urandom';
-            // Check random device for special character device protection mode. Use lstat()
-            // instead of stat() in case an attacker arranges a symlink to a fake device.
             $lstat = @lstat($device);
             if ($lstat !== false && ($lstat['mode'] & 0170000) === 020000) {
                 $this->_randomFile = fopen($device, 'rb') ?: null;
 
                 if (is_resource($this->_randomFile)) {
-                    // Reduce PHP stream buffer from default 8192 bytes to optimize data
-                    // transfer from the random device for smaller values of $length.
-                    // This also helps to keep future randoms out of user memory space.
                     $bufferSize = 8;
 
                     if (function_exists('stream_set_read_buffer')) {
                         stream_set_read_buffer($this->_randomFile, $bufferSize);
                     }
-                    // stream_set_read_buffer() isn't implemented on HHVM
                     if (function_exists('stream_set_chunk_size')) {
                         stream_set_chunk_size($this->_randomFile, $bufferSize);
                     }
@@ -313,6 +451,16 @@ class Security
         throw new Exception('Unable to generate a random key');
     }
 
+    /**
+     **********************generateRandomString*******************
+     * description
+     * 2019/3/133:37 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param int $length
+     * @return bool|string
+     * @throws Exception
+     */
     public function generateRandomString($length = 32)
     {
         if (!is_int($length)) {
@@ -325,6 +473,17 @@ class Security
         return substr(Strings::base64UrlEncode($bytes), 0, $length);
     }
 
+    /**
+     **********************generatePasswordHash*******************
+     * description
+     * 2019/3/133:37 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $password
+     * @param null $cost
+     * @return bool|string
+     * @throws Exception
+     */
     public function generatePasswordHash($password, $cost = null)
     {
         if ($cost === null) {
@@ -343,6 +502,17 @@ class Security
         return $hash;
     }
 
+    /**
+     **********************validatePassword*******************
+     * description
+     * 2019/3/133:39 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $password
+     * @param $hash
+     * @return bool
+     * @throws Exception
+     */
     public function validatePassword($password, $hash)
     {
         if (!is_string($password) || $password === '') {
@@ -365,6 +535,16 @@ class Security
         return $this->compareString($test, $hash);
     }
 
+    /**
+     **********************generateSalt*******************
+     * description
+     * 2019/3/133:39 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param int $cost
+     * @return string
+     * @throws Exception
+     */
     protected function generateSalt($cost = 13)
     {
         $cost = (int) $cost;
@@ -393,6 +573,16 @@ class Security
         return $diff === 0;
     }
 
+    /**
+     **********************maskToken*******************
+     * description
+     * 2019/3/133:39 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $token
+     * @return string
+     * @throws Exception
+     */
     public function maskToken($token)
     {
         // The number of bytes in a mask is always equal to the number of bytes in a token.

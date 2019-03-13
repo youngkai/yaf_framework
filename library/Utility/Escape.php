@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Escape.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:19:40
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Escape
 {
@@ -35,8 +30,8 @@ class Escape
 	/**
 	 * 转义字符串
 	 * 
-	 * @param array $array 被转移的数组
-	 * @return array
+	 * @param mixed $array 被转移的数组
+	 * @return mixed
 	 */
 	static public function escapeArrayHTML($array) {
 		if (!is_array($array)) return self::escapeHTML($array);
@@ -54,6 +49,7 @@ class Escape
 	 * @param string $str 需要加密的字符串
 	 * @param string $key 密钥
 	 * @return string 加密后的结果
+     * @throws \Exception
 	 */
 	static public function encrypt($str, $key, $iv = '') {
 		if (!$key || !is_string($key)) throw new \Exception("[utility.Security.encrypt] security key is required.");
@@ -72,6 +68,7 @@ class Escape
 	 * @param string $str 解密的字符串
 	 * @param string $key 密钥
 	 * @return string 解密后的结果
+     * @throws \Exception
 	 */
 	static public function decrypt($str, $key, $iv = '') {
 		if (!$str || !is_string($str)) throw new \Exception("[utility.Security.decrypt] security string is required.");
@@ -115,6 +112,7 @@ class Escape
 	 * @param string $fileName 被检查的路径
 	 * @param boolean $ifCheck 是否需要检查文件名，默认为false
 	 * @return string
+     * @throws \Exception
 	 */
 	static public function escapePath($filePath, $ifCheck = false) {
 		$_tmp = array("'" => '', '#' => '', '=' => '', '`' => '', '$' => '', '%' => '', '&' => '', ';' => '');

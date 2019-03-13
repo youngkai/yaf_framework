@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Image.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:19:08
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Image
 {

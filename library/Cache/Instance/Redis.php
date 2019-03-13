@@ -1,14 +1,18 @@
 <?php
-/*================================================================
-*   File Name：Redis.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-15 18:13:51
-*   Description：
-================================================================*/
+
 namespace Cache\Instance;
+
+
+
 use \Cache\Driver;
+
+
+
 class Redis extends Driver 
 {
+    /**
+     * @var $redis \Redis
+     */
 	protected $redis;
 	
 	public function __construct(\Cache\Connector\RedisConnection $redis)
@@ -26,7 +30,9 @@ class Redis extends Driver
 		if(!is_null($cache = $this->redis->get($key)))
 		{
 			return $cache;
-		}
+		}else {
+		    return null;
+        }
 	}
 	
 	public function put($key, $value, $seconds = 0)

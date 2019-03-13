@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Validator.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 10:58:54
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Validator
 {

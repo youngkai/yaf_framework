@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：File.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:18:17
-*   Description：
-================================================================*/
+
 namespace Utility;
 class File
 {
@@ -55,26 +50,30 @@ class File
 		return @unlink($filename);
 	}
 
-	/**
-	 * 保存文件
-	 * 
-	 * @param string $fileName          保存的文件名
-	 * @param mixed $data               保存的数据
-	 * @param boolean $isBuildReturn    是否组装保存的数据是return $params的格式，如果没有则以变量声明的方式保存,默认为true则以return的方式保存
-	 * @param string $method            打开文件方式，默认为rb+的形式
-	 * @param boolean $ifLock           是否对文件加锁，默认为true即加锁
-	 */
+    /**
+     **********************savePhpData*******************
+     * description 保存文件
+     * 2019/3/133:52 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $fileName
+     * @param $data
+     * @param bool $isBuildReturn
+     * @param string $method
+     * @param bool $ifLock
+     * @return int
+     */
 	static public function savePhpData($fileName, $data, $isBuildReturn = true, $method = self::READWRITE, $ifLock = true) {
 		$temp = "<?php\r\n ";
 		if (!$isBuildReturn && is_array($data)) {
 			foreach ($data as $key => $value) {
 				if (!preg_match('/^\w+$/', $key)) continue;
-				$temp .= "\$" . $key . " = " . String::varToString($value) . ";\r\n";
+				$temp .= "\$" . $key . " = " . Strings::varToString($value) . ";\r\n";
 			}
 			$temp .= "\r\n?>";
 		} else {
 			($isBuildReturn) && $temp .= " return ";
-			$temp .= String::varToString($data) . ";\r\n?>";
+			$temp .= Strings::varToString($data) . ";\r\n?>";
 		}
 		return self::write($fileName, $temp, $method, $ifLock);
 	}

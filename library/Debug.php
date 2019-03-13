@@ -1,4 +1,5 @@
 <?php
+
 defined('RUNTIME_START') or define('RUNTIME_START', microtime(true));
 defined('USEMEM_START') or define('USEMEM_START', memory_get_usage());
 /**
@@ -27,10 +28,15 @@ class debug
 	 */
 	const RUN_TIME = 'time';
 
-	/**
-	 * 设置调试点
-	 * @param string $point 调试点
-	 */
+    /**
+     **********************setBreakPoint*******************
+     * description
+     * 2019/3/133:23 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $point
+     * @return bool
+     */
     static public function setBreakPoint($point = '') 
     {
 		if (isset(self::$breakpoint[$point])) return false;
@@ -70,11 +76,16 @@ class debug
 		return $useTime ? round($useTime, self::DECIMAL_DIGITS) : 0;
 	}
 
-	/**
-	 * 获取调试点
-	 * @param $point
-	 * @param $label
-	 */
+    /**
+     **********************getBreakPoint*******************
+     * description 获取调试点
+     * 2019/3/133:23 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $point
+     * @param string $label
+     * @return array|mixed
+     */
     static public function getBreakPoint($point, $label = '') 
     {
 		if (!isset(self::$breakpoint[$point])) return [];
@@ -195,4 +206,3 @@ class debug
 	}
 
 }
-?>

@@ -1,14 +1,31 @@
 <?php
-/*================================================================
- *  File Name：Rsa.php
- *  Author：carlziess, chengmo9292@126.com
- *  Create Date：2016-09-21 22:39:49
- *  Description：
- ===============================================================*/
+
 namespace Encryptions;
-if(false == extension_loaded('openssl')) throw new \Exception('not found openssl extensions.',500);
+
 class Rsa 
 {
+
+    /**
+     * Rsa constructor.
+     * @throws \Exception
+     */
+    public function __construct()
+    {
+        if(false == extension_loaded('openssl')) throw new \Exception('not found openssl extensions.',500);
+    }
+
+
+    /**
+     **********************privateKeyEncode*******************
+     * description
+     * 2019/3/133:16 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $plainText
+     * @param string $privateKey
+     * @return bool|string
+     * @throws \Exception
+     */
     static public function privateKeyEncode($plainText = '', $privateKey = '')
     {
         if('' == $plainText || '' == $privateKey) throw new \Exception('The plain text and private key can not be null.',500);
@@ -18,6 +35,17 @@ class Rsa
         return static::strToHex(base64_encode($crypted));
     }
 
+    /**
+     **********************privateKeyDecode*******************
+     * description
+     * 2019/3/133:16 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $cipherText
+     * @param string $privateKey
+     * @return mixed
+     * @throws \Exception
+     */
     static public function privateKeyDecode($cipherText = '', $privateKey = '')
     {
         if('' == $cipherText || '' == $privateKey) throw new \Exception('The cipher text and private key can not be null.',500);
@@ -27,6 +55,17 @@ class Rsa
         return $decrypted;
     }
 
+    /**
+     **********************publicKeyEncode*******************
+     * description
+     * 2019/3/133:16 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $plainText
+     * @param string $publicKey
+     * @return bool|string
+     * @throws \Exception
+     */
     static public function publicKeyEncode($plainText = '', $publicKey = '')
     {
         if('' == $plainText || '' == $publicKey) throw new \Exception('The plain text and public key can not be null.',500);
@@ -36,6 +75,17 @@ class Rsa
         return static::strToHex(base64_encode($encrypted));
     }
 
+    /**
+     **********************publicKeyDecode*******************
+     * description
+     * 2019/3/133:17 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $cipherText
+     * @param string $publicKey
+     * @return mixed
+     * @throws \Exception
+     */
     static public function publicKeyDecode($cipherText = '', $publicKey = '')
     {
         if('' == $cipherText || '' == $publicKey) throw new \Exception('The cipher text and public key can not be null',500);

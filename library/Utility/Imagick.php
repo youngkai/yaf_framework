@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Imagick.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:16:01
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Imagick
 {

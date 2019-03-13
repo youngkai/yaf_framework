@@ -1,23 +1,45 @@
 <?php
-/*================================================================
-*  File Name：Controller.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-09-03 00:39:56
-*  Description：
-===============================================================*/
+
+
 class Controller extends \Yaf\Controller_Abstract
 {
 
+    /**
+     * @var $response \Response
+     */
+    protected $response = null;
+
+    /**
+     **********************init*******************
+     * description
+     * 2019/3/132:54 PM
+     * author yangkai@rsung.com
+     *******************************************
+     */
     public function init()
     {
+        $this->response = new Response();
         $this->beforeInit();
         $this->responseType();
-        //开启CSRF验证
-        //Request::getInstance()->getCsrfToken();
     }
-    
+
+    /**
+     **********************beforeInit*******************
+     * description
+     * 2019/3/132:54 PM
+     * author yangkai@rsung.com
+     *******************************************
+     */
     protected function beforeInit() { }
 
+    /**
+     **********************responseType*******************
+     * description
+     * 2019/3/132:54 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param null $responseType
+     */
     protected function responseType($responseType = NULL)
     {
         $responseType = NULL === $responseType ? Yaf\Registry::get('responseType') : $responseType;
@@ -41,7 +63,17 @@ class Controller extends \Yaf\Controller_Abstract
         }
         Yaf\Registry::set('responseTyep',$responseType);
     }
-    
 
+    /**
+     **********************response*******************
+     * description
+     * 2019/3/132:54 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param array $data
+     */
+    protected function response($data = [])
+    {
+        $this->response->send($data);
+    }
 }
-?>

@@ -1,15 +1,20 @@
 <?php
-/*================================================================
-*  File Name：DB.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-06-20 10:55:09
-*  Description：
-===============================================================*/
+
 use \Database\MySQLi;
 class DB 
 {
 	static public $connections = [];
 
+    /**
+     **********************getInstance*******************
+     * description
+     * 2019/3/133:22 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $instance
+     * @return mixed
+     * @throws Exception
+     */
 	static public function getInstance($instance = 'master')
 	{
         $config = (new \Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'database.ini'))->database;
@@ -36,6 +41,17 @@ class DB
 		return static::$connections[$connection][$instance];
 	}
 
+    /**
+     **********************__callStatic*******************
+     * description
+     * 2019/3/133:22 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $method
+     * @param $parameters
+     * @return mixed
+     * @throws Exception
+     */
     static public function __callStatic($method,$parameters)
     {
 		return call_user_func_array([static::getInstance(),$method],$parameters);

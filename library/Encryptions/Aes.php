@@ -1,12 +1,10 @@
 <?php
-/*================================================================
-*   File Name：Aes.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-20 10:21:32
-*   Description：
-================================================================*/
+
 namespace Encryptions;
+
 use \Utility\Strings as Str;
+
+
 class Aes
 {
 	static protected $cipher = MCRYPT_RIJNDAEL_256;
@@ -20,6 +18,16 @@ class Aes
 		return base64_encode($iv.$value);
 	}
 
+    /**
+     **********************decrypt*******************
+     * description
+     * 2019/3/133:13 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $value
+     * @return bool|string
+     * @throws \Exception
+     */
 	static public function decrypt($value)
 	{
 		$value = base64_decode($value);
@@ -55,10 +63,20 @@ class Aes
 	static protected function pad($value)
 	{
 		$pad = static::$block - (Str::length($value) % static::$block);
-		return $value .= str_repeat(chr($pad), $pad);
+		$value .= str_repeat(chr($pad), $pad);
+        return $value;
 	}
 
-	
+    /**
+     **********************unpad*******************
+     * description
+     * 2019/3/133:14 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $value
+     * @return bool|string
+     * @throws \Exception
+     */
 	static protected function unpad($value)
 	{
 		$pad = ord($value[($length = Str::length($value)) - 1]);

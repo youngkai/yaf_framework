@@ -1,11 +1,8 @@
 <?php
-/*================================================================
-*  File Name：Base36.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2018-06-15 10:14:23
-*  Description：
-===============================================================*/
+
 namespace Encryptions;
+
+
 class Base36 
 { 
     //密码字典 

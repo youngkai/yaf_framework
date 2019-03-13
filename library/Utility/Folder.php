@@ -1,10 +1,5 @@
 <?php
-/*================================================================
-*   File Name：Folder.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-21 13:18:26
-*   Description：
-================================================================*/
+
 namespace Utility;
 class Folder
 {
@@ -16,7 +11,7 @@ class Folder
 	 * 获取文件列表
 	 *
 	 * @param string $dir
-	 * @param boolean $mode 只读取文件列表,不包含文件夹
+	 * @param mixed $mode 只读取文件列表,不包含文件夹
 	 * @return array
 	 */
 	static public function read($dir, $mode = self::READ_ALL) {
@@ -66,12 +61,16 @@ class Folder
 		return true;
 	}
 
-	/**
-	 * 递归的删除目录
-	 *
-	 * @param string $dir 目录
-	 * @param Boolean $delFolder 是否删除目录
-	 */
+    /**
+     **********************clearRecur*******************
+     * description 递归的删除目录
+     * 2019/3/133:53 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $dir
+     * @param bool $delFolder
+     * @return bool
+     */
 	static public function clearRecur($dir, $delFolder = false) {
 		if (!static::isDir($dir)) return false;
 		if (!$handle = @opendir($dir)) return false;

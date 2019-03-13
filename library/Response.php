@@ -1,10 +1,6 @@
 <?php
-/*================================================================
-*  File Name：Response.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-10-04 10:46:40
-*  Description：
-===============================================================*/
+
+
 class Response extends Yaf\Response\Http
 {
     use Singleton;
@@ -15,7 +11,7 @@ class Response extends Yaf\Response\Http
         'html'  =>  'text/html'
     ];
 
-    public function send($data = '')
+    public function send($data = [])
     {
         $responseType = Yaf\Registry::get('responseType');
         $contentType = isset($responseType) ? $responseType : 'json'; 

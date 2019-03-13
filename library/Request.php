@@ -1,10 +1,5 @@
 <?php
-/*================================================================
- *  File Name：Request.php
- *  Author：carlziess, chengmo9292@126.com
- *  Create Date：2016-09-30 23:05:34
- *  Description：
- ===============================================================*/
+
 use Utility\Strings;
 use Utility\Cookies;
 class Request extends Yaf\Request\Http
@@ -114,7 +109,7 @@ class Request extends Yaf\Request\Http
 
     public function getHeaders($name = '')
     {
-        return '' == $name ? $this->getServer() : $this->getServer($name);
+        return '' == $name ? null : $this->getServer($name);
     }
 
     public function getPostBodyParam($param = null)
@@ -134,11 +129,25 @@ class Request extends Yaf\Request\Http
         return null !== $this->_rawBody && isset($this->_rawBody[$param]) ? $this->_rawBody[$param] : '';
     }
 
+    /**
+     **********************getCsrfToken*******************
+     * description
+     * 2019/3/133:30 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param bool $regenerate
+     * @return null|string
+     * @throws Exception
+     */
     public function getCsrfToken($regenerate = false)                                
     {                                                                                
         if ($this->_csrfToken === null || $regenerate) {                             
-            if ($regenerate || ($token = $this->loadCsrfToken()) === null) {         
-                $token = $this->generateCsrfToken();                                 
+            if ($regenerate || ($token = $this->loadCsrfToken()) === null) {
+                try {
+                    $token = $this->generateCsrfToken();
+                } catch (Exception $e) {
+                    throw new \Exception($e->getMessage(), $e->getCode());
+                }
             }                                                                        
             $this->_csrfToken = Security::getInstance()->maskToken($token);              
         }                                                                            
@@ -151,17 +160,30 @@ class Request extends Yaf\Request\Http
             return Cookies::get($this->csrfParam);                  
         }                                                                            
         return Sessions::get($this->csrfParam);                       
-    }                                                                                
+    }
 
+    /**
+     **********************generateCsrfToken*******************
+     * description
+     * 2019/3/133:30 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @return bool|string
+     * @throws Exception
+     */
     protected function generateCsrfToken()                                           
-    {                                                                                
-        $token = Security::getInstance()->generateRandomString();                   
-        if ($this->enableCsrfCookie) {                                               
-            $this->createCsrfCookie($token);                               
-        } else {                                                                     
-            Sessions::set($this->csrfParam, $token);                  
-        }                                                                            
-        return $token;                                                               
+    {
+        try {
+            $token = Security::getInstance()->generateRandomString();
+            if ($this->enableCsrfCookie) {
+                $this->createCsrfCookie($token);
+            } else {
+                Sessions::set($this->csrfParam, $token);
+            }
+            return $token;
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
     }                                                                                
 
     public function getCsrfTokenFromHeader()                                         
@@ -173,16 +195,29 @@ class Request extends Yaf\Request\Http
     protected function createCsrfCookie($token)                                      
     {                                                                                
         return Cookies::put($this->csrfParam, $token, 0, '/', null, false, true);
-    }                                                                                
+    }
 
+    /**
+     **********************validateCsrfToken*******************
+     * description
+     * 2019/3/133:31 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param null $clientSuppliedToken
+     * @return bool
+     * @throws Exception
+     */
     public function validateCsrfToken($clientSuppliedToken = null)                   
     {                                                                                
-        $method = $this->getMethod();                                                
-        // only validate CSRF token on non-"safe" methods https://tools.ietf.org/html/rfc2616#section-9.1.1
+        $method = $this->getMethod();
         if (in_array($method, ['GET', 'HEAD', 'OPTIONS'], true)) {
             return true;                                                             
-        }                                                                            
-        $trueToken = $this->getCsrfToken();                                          
+        }
+        try {
+            $trueToken = $this->getCsrfToken();
+        } catch (Exception $e) {
+            throw new \Exception($e->getMessage(), $e->getCode());
+        }
         if ($clientSuppliedToken !== null) {                                         
             return $this->validateCsrfTokenInternal($clientSuppliedToken, $trueToken);
         }                                                                            

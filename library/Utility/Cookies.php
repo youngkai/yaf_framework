@@ -1,12 +1,8 @@
 <?php
-/*================================================================
-*  File Name：Cookies.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-02-20 18:55:40
-*  Description：
-===============================================================*/
+
 namespace Utility;
 use Utility\Arrays;
+
 class Cookies
 {
     const forever = 525600;

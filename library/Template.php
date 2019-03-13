@@ -1,10 +1,5 @@
 <?php
-/*================================================================
- *  File Name：Template.php
- *  Author：carlziess, chengmo9292@126.com
- *  Create Date：2016-09-03 13:37:48
- *  Description：
- ===============================================================*/
+
 use \Utility\Folder;
 class Template 
 {
@@ -26,6 +21,17 @@ class Template
         $this->templateDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR;
     }
 
+    /**
+     **********************render*******************
+     * description
+     * 2019/3/133:41 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $__tpl
+     * @param $__data
+     * @return string
+     * @throws Exception
+     */
     public function render($__tpl,$__data)
     {
         ob_start() && (empty($__data) || extract($__data, EXTR_SKIP));
@@ -34,13 +40,13 @@ class Template
             $__contents = $this->template($__tpl);
             eval('?>'.$__contents);
         }catch(\Exception $e){
-            $objfile = \Yaf_Registry::get('config')->get('template.cache_path') . $tpl;
+            $objfile = \Yaf_Registry::get('config')->get('template.cache_path') . $this->tpl;
             if(is_file($objfile))
             {
                 unlink($objfile);
             }
-            ob_get_clean(); 
-            throw $e;
+            ob_get_clean();
+            throw new \Exception($e->getMessage(), $e->getCode());
         }
         return ob_get_clean();
     }

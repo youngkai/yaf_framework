@@ -22,7 +22,9 @@ class Log
     // 日志信息
     static protected $_log = [];
 
-    // 日志存储
+    /**
+     * @var $_storage \Log_Driver_Abstract
+     */
     static protected $_storage = null;
 
     // 日志初始化
@@ -99,15 +101,16 @@ class Log
     }
 
     /**
-     * 记录日志 并且会过滤未经设置的级别
-     * @static
-     * @access public
-     * @param string $message 日志信息
-     * @param string $level  日志级别
-     * @param boolean $record  是否强制记录
-     * @param boolean $save  是否直接写入
-     * @param string  $class 日志类别
-     * @return void
+     **********************record*******************
+     * description 记录日志 并且会过滤未经设置的级别
+     * 2019/3/133:27 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $message
+     * @param string $level
+     * @param bool $record
+     * @param bool $save
+     * @param string $class
      */
     static public function record($message, $level = self::ERROR, $record = false, $save = false, $class = '') 
     {
@@ -135,12 +138,14 @@ class Log
     }
 
     /**
-     * 日志保存
-     * @static
-     * @access public
-     * @param integer $type 日志记录方式
-     * @param string $destination  写入目标
-     * @return void
+     **********************save*******************
+     * description 日志保存
+     * 2019/3/133:28 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param bool $save
+     * @param string $type
+     * @param string $destination
      */
     static public function save($save = false, $type = '', $destination = '') 
     {
@@ -179,15 +184,16 @@ class Log
     }
 
     /**
-     * 日志直接写入
-     * @static
-     * @access public
-     * @param string $message 日志信息
-     * @param string $level  日志级别
-     * @param integer $type 日志记录方式
-     * @param string $destination  写入目标
-     * @param string  $class 日志类别
-     * @return void
+     **********************write*******************
+     * description 日志直接写入
+     * 2019/3/133:28 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $message
+     * @param string $level
+     * @param string $type
+     * @param string $destination
+     * @param string $class
      */
     static public function write($message, $level = self::ERROR, $type = '', $destination = '', $class = '') 
     {
@@ -217,9 +223,13 @@ class Log
     }
 
     /**
-     * 生成写入目标， 如果没有指定，给出一个默认的目标
-     * @param  string $destination 写入目标
-     * @param  string $class       类别
+     **********************_generateDestination*******************
+     * description 生成写入目标， 如果没有指定，给出一个默认的目标
+     * 2019/3/133:27 PM
+     * author yangkai@rsung.com
+     *******************************************
+     * @param string $destination
+     * @param string $class
      * @return string
      */
     static private function _generateDestination($destination = '', $class = '')
