@@ -1,6 +1,7 @@
 <?php
 
 use \Database\MySQLi;
+
 class DB 
 {
 	static public $connections = [];
@@ -12,7 +13,7 @@ class DB
      * author yangkai@rsung.com
      *******************************************
      * @param string $instance
-     * @return mixed
+     * @return \Database\MySQLi
      * @throws Exception
      */
 	static public function getInstance($instance = 'master')
