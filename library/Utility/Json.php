@@ -3,6 +3,7 @@
 namespace Utility;
 class Json
 {
+
 	const JSON_SLICE = 1;
 	const JSON_IN_STR = 2;
 	const JSON_IN_ARR = 4;
