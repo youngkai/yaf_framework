@@ -97,8 +97,8 @@ class Arrays
 
     /**
      **********************array_set*******************
-     * description 向数组插入指定的key/value
-     * 2019/3/133:43 PM
+     * description
+     * 2019-04-0914:10
      * author yangkai@rsung.com
      *******************************************
      * @param $array
@@ -117,6 +117,7 @@ class Arrays
 			$array =& $array[$key];
 		}
 		$array[array_shift($keys)] = $value;
+		return [];
 	}
 	
 	/**

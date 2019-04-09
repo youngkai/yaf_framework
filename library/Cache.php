@@ -18,13 +18,13 @@ class Cache
      */
 	static public function getInstance($instance = 'master')
     {
-        $config = (new \Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'cache.ini'))->cache;
+        $config = (new Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'cache.ini'))->cache;
         $driver = !empty($config) && isset($config['driver']) ? $config['driver'] : 'redis';
 		if(!isset(static::$drivers[$driver]))
         {
             if(!isset($config[$driver][$instance]))
             {
-                throw new \Exception("Cache connections is not defined for [$driver-$instance]", 400);
+                throw new Exception("Cache connections is not defined for [$driver-$instance]", 400);
             }
 			static::$drivers[$driver][$instance] = static::factory($driver, $instance);
 		}
@@ -34,12 +34,12 @@ class Cache
     /**
      **********************factory*******************
      * description
-     * 2019/3/132:58 PM
+     * 2019-04-0913:48
      * author yangkai@rsung.com
      *******************************************
      * @param $driver
      * @param $instance
-     * @return \Cache\Instance\Database|\Cache\Instance\File|\Cache\Instance\Redis
+     * @return Cache\Instance\Database|Cache\Instance\File|\Cache\Instance\Redis
      * @throws Exception
      */
 	static protected function factory($driver,$instance)
@@ -52,13 +52,13 @@ class Cache
 		switch ($driver)
 		{
 			case 'file':
-				return new Cache\Instance\File(\Yaf_Application::app()->getConfig()->get('cache.path'));
+				return new Cache\Instance\File(Yaf\Application::app()->getConfig()->get('cache.path'));
 			case 'redis':
-				return new \Cache\Instance\Redis(\Cache\Connector\RedisConnection::getInstance($instance));
+				return new \Cache\Instance\Redis(Cache\Connector\RedisConnection::getInstance($instance));
 			case 'database':
-				return new Cache\Instance\Database(\Yaf_Application::app()->getConfig()->get('cache.key'));
+				return new Cache\Instance\Database(Yaf\Application::app()->getConfig()->get('cache.key'));
 			default:
-				throw new \Exception("Cache driver {$driver} is not supported.",-1001);
+				throw new Exception("Cache driver {$driver} is not supported.",-1001);
 		}
 	}
 
@@ -66,7 +66,7 @@ class Cache
     /**
      **********************extend*******************
      * description
-     * 2019/3/133:06 PM
+     * 2019-04-0913:47
      * author yangkai@rsung.com
      *******************************************
      * @param $driver
@@ -94,7 +94,7 @@ class Cache
         try {
             return call_user_func_array(array(static::getInstance(), $method), $parameters);
         } catch (Exception $e) {
-            throw new \Exception($e->getMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
     }
 

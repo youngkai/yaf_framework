@@ -54,7 +54,6 @@ class Date
 	 */
 	static public function dateDiff($interval, $startDateTime, $endDateTime) {
 		$diff = self::getTimeStamp($endDateTime) - self::getTimeStamp($startDateTime);
-		$retval = 0;
 		switch ($interval) {
 			case "y":
 				$retval = bcdiv($diff, (60 * 60 * 24 * 365));
@@ -154,21 +153,28 @@ class Date
 		return $daysInmonths[$month - 1];
 	}
 
-	/**
-	 * 获取该年的天数 
-	 * 
-	 * @return int 
-	 */
+    /**
+     **********************getDaysInYear*******************
+     * description
+     * 2019-04-0914:17
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $year
+     * @return int
+     */
 	static public function getDaysInYear($year) {
 		return self::isLeapYear($year) ? 366 : 365;
 	}
 
-	/**
-	 * 取得RFC格式的日期与时间
-	 * 
-	 * @param string $data 需要获取的时间,默认为null则获取当前时间
-	 * @return string
-	 */
+    /**
+     **********************getRFCDate*******************
+     * description
+     * 2019-04-0914:17
+     * author yangkai@rsung.com
+     *******************************************
+     * @param null $date
+     * @return string
+     */
 	static public function getRFCDate($date = null) {
 		$time = $date ? is_int($date) ? $date : strtotime($date) : time();
 		$tz = date('Z', $time);
@@ -250,13 +256,16 @@ class Date
 		return $date;
 	}
 
-	/**
-	 * 获取微秒数
-	 * 
-	 * @param string $mircrotime  微妙时间，默认为null则获取当前时间
-	 * @param string $get_as_float 获取微妙时间是否以浮点数返回,默认为false即不以浮点数方式返回
-	 * @return int
-	 */
+    /**
+     **********************getMicroTime*******************
+     * description
+     * 2019-04-0914:17
+     * author yangkai@rsung.com
+     *******************************************
+     * @param null $mircrotime
+     * @param bool $get_as_float
+     * @return float|int
+     */
 	static public function getMicroTime($mircrotime = null, $get_as_float = false) {
 		return array_sum(explode(' ', $mircrotime ? $mircrotime : microtime($get_as_float)));
 	}
@@ -281,15 +290,18 @@ class Date
 		return $dateTime ? is_int($dateTime) ? $dateTime : strtotime($dateTime) : time();
 	}
 
-	/**
-	 * 比较两个时间返回离现在最近的一个时间
-	 * 
-	 * @param int $time 当前时间戳
-	 * @param int $timestamp 比较的时间戳,默认为null则获取当前时间戳
-	 * @param string $format 格式化当前时间戳,默认为null则转化为格式Y-m-d H:i:s
-	 * @param array $type 要返回的时间类型，默认为 1则只返回Y-m-d否则返回Y-m-d m-d H:i
-	 * @return array
-	 */
+    /**
+     **********************getLastDate*******************
+     * description
+     * 2019-04-0914:17
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $time
+     * @param null $timestamp
+     * @param null $format
+     * @param int $type
+     * @return array
+     */
 	static public function getLastDate($time, $timestamp = null, $format = null, $type = 1) {
 		$timelang = array('second' => '秒前', 'yesterday' => '昨天', 'hour' => '小时前', 'minute' => '分钟前', 'qiantian' => '前天');
 		$timestamp = $timestamp ? $timestamp : time();

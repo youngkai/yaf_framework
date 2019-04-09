@@ -176,12 +176,12 @@ class debug
     {                                                                                
         try {                                                                         
             if(is_array($funcname)) {                                                 
-                $func = new \ReflectionMethod($funcname[0], $funcname[1]);            
+                $func = new ReflectionMethod($funcname[0], $funcname[1]);
                 $funcname = $funcname[1];                                             
             } else {                                                                  
-                $func = new \ReflectionFunction($funcname);                           
+                $func = new ReflectionFunction($funcname);
             }                                                                         
-        } catch (\ReflectionException $e) {                                           
+        } catch (ReflectionException $e) {
             echo $e->getMessage();                                                    
             return;                                                                                                                                                                                         
         }                                                                             

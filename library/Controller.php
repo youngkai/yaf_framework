@@ -1,11 +1,13 @@
 <?php
 
 
-class Controller extends \Yaf\Controller_Abstract
+use Yaf\Application;
+
+class Controller extends Yaf\Controller_Abstract
 {
 
     /**
-     * @var $response \Response
+     * @var $response Response
      */
     protected $response = null;
 
@@ -20,7 +22,8 @@ class Controller extends \Yaf\Controller_Abstract
     {
         $this->response = new Response();
         $this->beforeInit();
-        $this->responseType();
+        $response_type = Yaf\Application::app()->getConfig()->get('application.response_type');
+        $this->responseType($response_type);
     }
 
     /**
@@ -61,7 +64,7 @@ class Controller extends \Yaf\Controller_Abstract
                 Yaf\Dispatcher::getInstance()->autoRender(true);
                 $this->_view->engine = NULL;
         }
-        Yaf\Registry::set('responseTyep',$responseType);
+        Yaf\Registry::set('responseType', $responseType);
     }
 
     /**

@@ -1,10 +1,6 @@
 <?php
-/*================================================================
-*  File Name：Log.php
-*  Author：carlziess, chengmo9292@126.com
-*  Create Date：2016-01-15 13:52:18
-*  Description：
-===============================================================*/
+
+
 class Log 
 {
 
@@ -23,7 +19,7 @@ class Log
     static protected $_log = [];
 
     /**
-     * @var $_storage \Log_Driver_Abstract
+     * @var $_storage Log_Driver_Abstract
      */
     static protected $_storage = null;
 
@@ -121,7 +117,9 @@ class Log
             $caller['class'] = !empty($caller['class']) ? $caller['class'] : '';
             $caller['function'] = !empty($caller['function']) ? $caller['function'] : '';
         }
-                                                                        
+        /**
+         * @var $logConf stdClass
+         */
         $logConf = (new Yaf\Config\Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'log.ini'))->application->log;
         if ($record || false !== strpos($logConf->level, $level)) {
             if (!is_string($message))
@@ -151,6 +149,9 @@ class Log
     {
         if (empty(self::$_log))
             return;
+        /**
+         * @var $logConf stdClass
+         */
         $logConf = (new Yaf\Config\Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'log.ini'))->application->log;
         $type = $type ? $type : $logConf->type;
         if ($save === 2) {
@@ -170,7 +171,6 @@ class Log
                 }
                 $message = implode(PHP_EOL, $logsarr);
             }
-            $destination = '';
             $destination = self::_generateDestination($destination, $class);
             if (ucwords($type) == 'File'){
                 self::$_storage->write($message, $class);
@@ -197,6 +197,9 @@ class Log
      */
     static public function write($message, $level = self::ERROR, $type = '', $destination = '', $class = '') 
     {
+        /**
+         * @var $logConf stdClass
+         */
         $logConf = (new Yaf\Config\Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'log.ini'))->application->log;
         $type = $type ? $type : $logConf->type;
         if (! self::$_storage) {

@@ -1,8 +1,8 @@
 <?php
 
 
-define('VIEW_EXT', '.'.\Yaf_Registry::get('config')->get('yaf.view.ext'));
-class View implements \Yaf_View_Interface
+define('VIEW_EXT', '.' . Yaf_Registry::get('config')->get('yaf.view.ext'));
+class View implements Yaf_View_Interface
 {
     public $engine;
     protected $options = [],$tpl_vars = [], $tpl_dir;
@@ -14,7 +14,7 @@ class View implements \Yaf_View_Interface
 
     public function engine()
     {
-        return $this->engine ? : ($this->engine = new \Yaf_View_Simple($this->tpl_dir, $this->options));
+        return $this->engine ? : ($this->engine = new Yaf_View_Simple($this->tpl_dir, $this->options));
     }
 
     public function __set($name, $value)

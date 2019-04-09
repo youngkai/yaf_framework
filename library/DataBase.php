@@ -22,13 +22,13 @@ class DataBase
      */
 	static public function getInstance($instance = 'master')
 	{
-        $config = (new \Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'database.ini'))->database;
+        $config = (new Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'database.ini'))->database;
         $connection = !empty($config) && isset($config['driver']) ? $config['driver'] : 'mysql';
 		if(!isset(static::$connections[$connection]))
         {
 			if(empty($config->{$connection}[$instance]))
 			{
-				throw new \Exception("Database connection is not defined for [$connection-"."$instance].");
+				throw new Exception("Database connection is not defined for [$connection-"."$instance].");
             }
             $config = $config->{$connection}[$instance];
 			$config = [
@@ -64,12 +64,12 @@ class DataBase
     /**
      **********************connector*******************
      * description
-     * 2019/3/133:20 PM
+     * 2019-04-0913:49
      * author yangkai@rsung.com
      *******************************************
      * @param $driver
      * @return MySQLConnector
-     * @throws \Exception
+     * @throws Exception
      */
     static protected function connector($driver)
     {
@@ -84,8 +84,8 @@ class DataBase
                 default:
                     return new MySQLConnector;
             }
-        }catch (\Exception $e) {
-            throw new \Exception("Database driver [$driver] is not supported.", $e->getCode());
+        }catch (Exception $e) {
+            throw new Exception("Database driver [$driver] is not supported.", $e->getCode());
         }
 	}
 	

@@ -14,10 +14,11 @@ class Response extends Yaf\Response\Http
     public function send($data = [])
     {
         $responseType = Yaf\Registry::get('responseType');
-        $contentType = isset($responseType) ? $responseType : 'json'; 
+        $contentType = isset($responseType) ? $responseType : 'json';
         if (true === array_key_exists($contentType, $this->contentType))
         {
-            $this->setHeader('Content-Type',$this->contentType[$contentType].';charset=utf-8');
+            $this->_header = ['Content-Type' => $this->contentType[$contentType] . ';charset=utf-8'];
+            //$this->setHeader('Content-Type',$this->contentType[$contentType].';charset=utf-8');
             $responseData = 'json' === $contentType ? json_encode($data) : $data;
             $this->setBody($responseData);
             $this->response();
@@ -25,6 +26,5 @@ class Response extends Yaf\Response\Http
         }
         die(json_encode(['code'=>0,'data'=>[]]));
     }
-
 
 }

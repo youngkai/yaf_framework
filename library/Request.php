@@ -1,7 +1,9 @@
 <?php
 
-use Utility\Strings;
 use Utility\Cookies;
+use Utility\Sessions;
+
+
 class Request extends Yaf\Request\Http
 {
     use Singleton;
@@ -146,7 +148,7 @@ class Request extends Yaf\Request\Http
                 try {
                     $token = $this->generateCsrfToken();
                 } catch (Exception $e) {
-                    throw new \Exception($e->getMessage(), $e->getCode());
+                    throw new Exception($e->getMessage(), $e->getCode());
                 }
             }                                                                        
             $this->_csrfToken = Security::getInstance()->maskToken($token);              
@@ -159,7 +161,7 @@ class Request extends Yaf\Request\Http
         if ($this->enableCsrfCookie) {                                               
             return Cookies::get($this->csrfParam);                  
         }                                                                            
-        return Sessions::get($this->csrfParam);                       
+        return Sessions::getSession($this->csrfParam);
     }
 
     /**
@@ -178,7 +180,7 @@ class Request extends Yaf\Request\Http
             if ($this->enableCsrfCookie) {
                 $this->createCsrfCookie($token);
             } else {
-                Sessions::set($this->csrfParam, $token);
+                Sessions::get($this->csrfParam, $token);
             }
             return $token;
         } catch (Exception $e) {

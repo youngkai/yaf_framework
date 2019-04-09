@@ -4,7 +4,7 @@ use \Utility\Folder;
 class Template 
 {
     public $templateDir; 
-    private $tpl_include_files,$tpl;
+    private $tpl_include_files,$tpl,$needClear;
 
     static private $instance = NULL;
     static public function instance()
@@ -39,14 +39,14 @@ class Template
         {
             $__contents = $this->template($__tpl);
             eval('?>'.$__contents);
-        }catch(\Exception $e){
-            $objfile = \Yaf_Registry::get('config')->get('template.cache_path') . $this->tpl;
+        }catch(Exception $e){
+            $objfile = Yaf_Registry::get('config')->get('template.cache_path') . $this->tpl;
             if(is_file($objfile))
             {
                 unlink($objfile);
             }
             ob_get_clean();
-            throw new \Exception($e->getMessage(), $e->getCode());
+            throw new Exception($e->getMessage(), $e->getCode());
         }
         return ob_get_clean();
     }

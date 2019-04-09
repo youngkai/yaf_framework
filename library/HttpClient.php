@@ -27,15 +27,15 @@ class HttpClient
     static public function zull($api = '', $args = [], $method = 'POST', $timer = [])
     {
         if('' == $api || false == strpos($api,'-') || false == strpos($api,'.'))
-            throw new \Exception('接口名称无效!',403);
-        $config = \Yaf_Registry::get('config')->springcloud;                 
+            throw new Exception('接口名称无效!',403);
+        $config = Yaf_Registry::get('config')->springcloud;
         if(
             empty($config) || 
             !isset($config['zullSecretKey']) || 
             empty($config['zullSecretKey']) || 
             !isset($config['zullAccessId']) || 
             empty($config['zullAccessId'])
-        ) throw new \Exception('Zull配置无效!',403);
+        ) throw new Exception('Zull配置无效!',403);
         $zullHost = !empty($config) && isset($config['zullHost']) ? $config['zullHost'] : static::$zullHost;
         //$zullPort = !empty($config) && isset($config['zullPort']) ? $config['zullPort'] : static::$zullPort;
         $path = strtr($api, '.', '/');        
@@ -61,8 +61,8 @@ class HttpClient
     static public function sidecar($api = '', $args = [], $method = 'POST', $timer = [])
     {
         if('' == $api || false == strpos($api,'-') || false == strpos($api,'.'))
-            throw new \Exception('接口名称无效!',403);
-        $config = \Yaf_Registry::get('config')->springcloud;                 
+            throw new Exception('接口名称无效!',403);
+        $config = Yaf_Registry::get('config')->springcloud;
         $sidecarHost = !empty($config) && isset($config['sidecarHost']) ? $config['sidecarHost'] : static::$sidecarHost;
         $sidecarPort = !empty($config) && isset($config['sidecarPort']) ? $config['sidecarPort'] : static::$sidecarPort;
         $uri = $sidecarHost.':'.$sidecarPort.'/'.static::getRestfullPath($api);
@@ -85,7 +85,7 @@ class HttpClient
     static protected function send($uri, $args = [], $method = 'POST', $timer = [])
     {                                                                                                                    
         if('' == $uri) 
-            throw new \Exception('URI参数无效!',403);
+            throw new Exception('URI参数无效!',403);
         $startTime = Date::getMicroTime(microtime());                            
         $handle = curl_init();                                                                                           
         if('POST' == $method)                                                        

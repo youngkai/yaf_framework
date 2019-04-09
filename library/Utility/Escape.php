@@ -1,6 +1,7 @@
 <?php
 
 namespace Utility;
+
 class Escape
 {
 
@@ -16,12 +17,16 @@ class Escape
 		return Json::encode(is_string($source) ? self::escapeHTML($source) : self::escapeArrayHTML($source), $charset);
 	}
 
-	/**
-	 * 转义输出字符串
-	 * 
-	 * @param string $str 被转义的字符串
-	 * @return string
-	 */
+    /**
+     **********************escapeHTML*******************
+     * description
+     * 2019-04-0914:17
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $str
+     * @param string $charset
+     * @return string
+     */
 	static public function escapeHTML($str, $charset = 'ISO-8859-1') {
 		if (!is_string($str)) return $str;
 		return htmlspecialchars($str, ENT_QUOTES, $charset);
@@ -43,14 +48,18 @@ class Escape
 		return $_tmp;
 	}
 
-	/**
-	 * 字符串加密
-	 * 
-	 * @param string $str 需要加密的字符串
-	 * @param string $key 密钥
-	 * @return string 加密后的结果
+    /**
+     **********************encrypt*******************
+     * description
+     * 2019-04-0914:18
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $str
+     * @param $key
+     * @param string $iv
+     * @return string
      * @throws \Exception
-	 */
+     */
 	static public function encrypt($str, $key, $iv = '') {
 		if (!$key || !is_string($key)) throw new \Exception("[utility.Security.encrypt] security key is required.");
 		if (!$str || !is_string($str)) throw new \Exception("[utility.Security.encrypt] security string is required.");

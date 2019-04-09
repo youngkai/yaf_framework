@@ -1,7 +1,7 @@
 <?php
 
 namespace Utility;
-use Utility\Arrays;
+
 
 class Cookies
 {

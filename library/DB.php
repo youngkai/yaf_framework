@@ -13,18 +13,18 @@ class DB
      * author yangkai@rsung.com
      *******************************************
      * @param string $instance
-     * @return \Database\MySQLi
+     * @return Database\MySQLi
      * @throws Exception
      */
 	static public function getInstance($instance = 'master')
 	{
-        $config = (new \Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'database.ini'))->database;
+        $config = (new Yaf\Config\Ini(APPLICATION_PATH. DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'database.ini'))->database;
         $connection = !empty($config) && isset($config['driver']) ? $config['driver'] : 'mysql';
 		if(!isset(static::$connections[$connection][$instance]))
         {
 			if(empty($config->{$connection}[$instance]))
 			{
-				throw new \Exception("Database connection is not defined for [$connection-"."$instance].");
+				throw new Exception("Database connection is not defined for [$connection-"."$instance].");
             }
             $config = $config->{$connection}[$instance];
 			$config = [

@@ -5,7 +5,6 @@ class IndexController extends Controller {
 
 
 	public function indexAction() {
-		$result = (new TestModel())->getAll();
-		$this->response(['code' => 200, 'msg' => 'success', 'data' => $result]);
+        $this->response(['code' => 200, 'msg' => 'success', 'data' => ['name' => 'aaa']]);
 	}
 }

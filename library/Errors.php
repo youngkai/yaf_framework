@@ -58,6 +58,9 @@ class Errors
             break;
         }
         $message = sprintf('PHP %s:  %s in %s on line %d', $errors, $errstr, $errfile, $errline);
+        /**
+         * @var $logConf stdClass
+         */
         $logConf = (new Yaf\Config\Ini(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'conf' . DIRECTORY_SEPARATOR . 'log.ini'))->application->log;
         if ($errno && true == $logConf->record) {
             if (class_exists('Log')) {

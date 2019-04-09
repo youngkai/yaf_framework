@@ -1,20 +1,16 @@
 <?php
-/*================================================================
-*   File Name：Authorize.php
-*   Author：carlziess, lizhenglin@g7.com.cn
-*   Create Date：2016-02-17 16:28:15
-*   Description：
-================================================================*/
+
 class Authorize
 {
 	static public $drivers = [];
     static public $registrar = [];
 
-	/**
-	 * Driver
-	 * @param string $driver
-	 * @return multitype:
-	 */
+    /**
+     * Driver
+     * @param string $driver
+     * @return mixed
+     * @throws Exception
+     */
     static public function driver($driver = null)
     {
         if (is_null($driver)) $driver = Yaf\Registry::get('config')->auth->driver;
@@ -24,11 +20,16 @@ class Authorize
 		return static::$drivers[$driver];
     }
 
-	/**
-	 * Factory
-	 * @param string $driver
-	 * @throws \Exception
-	 */
+    /**
+     **********************factory*******************
+     * description
+     * 2019-04-0913:46
+     * author yangkai@rsung.com
+     *******************************************
+     * @param $driver
+     * @return mixed
+     * @throws Exception
+     */
     static protected function factory($driver)
     {
         if (isset(static::$registrar[$driver])) {
@@ -38,7 +39,7 @@ class Authorize
         switch($driver) 
         {
 			default:
-			throw new \Exception("Authorize driver {$driver} is not supported.",504);
+			throw new Exception("Authorize driver {$driver} is not supported.",504);
 		}
     }
 
@@ -51,12 +52,13 @@ class Authorize
 		static::$registrar[$driver] = $resolver;
     }
 
-	/**
-	 * __callStatic
-	 * @param array $method
-	 * @param array $parameters
-	 * @return mixed
-	 */
+    /**
+     * __callStatic
+     * @param array $method
+     * @param array $parameters
+     * @return mixed
+     * @throws Exception
+     */
     static public function __callStatic($method, $parameters)
     {
         $drive = static::driver();
